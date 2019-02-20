@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: Google Firebase Cloud Messaging REST API
+  description: |
+    Using the Firebase Admin SDK or FCM app server protocols, you can build message requests and send them to targets.
+  version: v1
+tags:
+  - name: Messages
+    description: Send a message to specified target (a registration token, topic or condition).
+servers:
+  - url: https://fcm.googleapis.com
+security:
+  - Admin: []
+paths:
+  /v1/projects/{project_id}/messages:send:
+    post:
+      tags:
+        - Messages
+      summary: Send messages to topics
+      description: |
+        To send messages to topics, specify the desired topic name in the send request.
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: A valid GCP project ID.
+          example: myproject-b5ae1
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  $ref: "#/components/schemas/Message"
+        required: true
+      responses:
+        200:
+          description: Request was successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    $ref: "#/components/schemas/Message"
+components:
+  securitySchemes:
+    Admin:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: |
+        A valid api key of firebase admin.
+        https://firebase.google.com/docs/cloud-messaging/auth-server
+  schemas:
+    Message:
+      type: object
+      description: |
+        Message to send by Firebase Cloud Messaging Service.
+        https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#Message
+      properties:
+        name:
+          type: string
+          description: Output Only. The identifier of the message sent, in the format of projects/*/messages/{message_id}.
+          example: projects/myproject-b5ae1/messages/5735743068807585451
+        topic:
+          type: string
+          description: Name of target topic.
+          example: movies
+        webpush:
+          $ref: "#/components/schemas/Webpush"
+    Webpush:
+      type: object
+      description: Webpush protocol options.
+      properties:
+        notification:
+          $ref: "#/components/schemas/Notification"
+    Notification:
+      type: object
+      description: |
+        Web Notification options as a JSON object.
+        Supports Notification instance properties as defined in Web Notification API.
+        If present, "title" and "body" fields override google.firebase.fcm.v1.Notification.title and google.firebase.fcm.v1.Notification.body.
+      properties:
+        title:
+          type: string
+          description: The notification's title.
+          example: Firebase
+        body:
+          type: string
+          description: The notification's body text.
+          example: my message.
+        icon:
+          type: string
+          description: The URL of the image used as an icon of the notification as specified in the constructor's options parameter.
+          example: https://firebase.google.com/_static/c614b31167/images/firebase/favicon.png
+        click_action:
+          type: string
+          description: |
+            The action associated with a user click on the notification.
+            If specified, an activity with a matching intent filter is launched when a user clicks on the notification.
+          example: https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+        image:
+          type: string
+          description: The URL of an image to be displayed as part of the notification, as specified in the constructor's options parameter.
+          example: https://www.gstatic.com/webp/gallery/4.sm.webp
+        data:
+          type: object
+          description: Arbitrary key/value payload.

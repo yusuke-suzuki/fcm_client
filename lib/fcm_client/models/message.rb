@@ -21,6 +21,9 @@ module FcmClient
     # Name of target topic.
     attr_accessor :topic
 
+    # Arbitrary key/value payload.
+    attr_accessor :data
+
     attr_accessor :webpush
 
     # Attribute mapping from ruby-style variable name to JSON key.
@@ -28,6 +31,7 @@ module FcmClient
       {
         :'name' => :'name',
         :'topic' => :'topic',
+        :'data' => :'data',
         :'webpush' => :'webpush'
       }
     end
@@ -37,6 +41,7 @@ module FcmClient
       {
         :'name' => :'String',
         :'topic' => :'String',
+        :'data' => :'Object',
         :'webpush' => :'Webpush'
       }
     end
@@ -55,6 +60,10 @@ module FcmClient
 
       if attributes.has_key?(:'topic')
         self.topic = attributes[:'topic']
+      end
+
+      if attributes.has_key?(:'data')
+        self.data = attributes[:'data']
       end
 
       if attributes.has_key?(:'webpush')
@@ -82,6 +91,7 @@ module FcmClient
       self.class == o.class &&
           name == o.name &&
           topic == o.topic &&
+          data == o.data &&
           webpush == o.webpush
     end
 
@@ -94,7 +104,7 @@ module FcmClient
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [name, topic, webpush].hash
+      [name, topic, data, webpush].hash
     end
 
     # Builds the object from hash

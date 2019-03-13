@@ -70,6 +70,9 @@ components:
           type: string
           description: Name of target topic.
           example: movies
+        data:
+          type: object
+          description: Arbitrary key/value payload.
         webpush:
           $ref: "#/components/schemas/Webpush"
     Webpush:
